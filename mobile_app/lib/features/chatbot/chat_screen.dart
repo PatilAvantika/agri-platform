@@ -226,6 +226,7 @@ class ChatBubble extends StatelessWidget {
         ),
         child: Text(
           message,
+
           style: Theme.of(context)
               .textTheme
               .bodyLarge

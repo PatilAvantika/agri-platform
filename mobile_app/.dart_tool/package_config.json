@@ -44,10 +44,22 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "fl_chart",
+      "rootUri": "file:///C:/Users/Avantika%20patil/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.69.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/sanketvalunj/develop/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "flutter_lints",
+      "rootUri": "file:///C:/Users/Avantika%20patil/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "flutter_test",
@@ -84,6 +96,12 @@
       "rootUri": "file:///Users/sanketvalunj/.pub-cache/hosted/pub.dev/leak_tracker_testing-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///C:/Users/Avantika%20patil/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "matcher",
@@ -154,6 +172,12 @@
     {
       "name": "typed_data",
       "rootUri": "file:///Users/sanketvalunj/.pub-cache/hosted/pub.dev/typed_data-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "typed_data",
+      "rootUri": "file:///C:/Users/Avantika%20patil/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },

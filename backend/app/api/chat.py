@@ -13,8 +13,8 @@ from app.utils.helpers import (
 
 router = APIRouter()
 
-
 @router.post("/", response_model=ChatResponse)
+
 def chat_endpoint(request: ChatRequest):
 
     user_message = request.message.strip()

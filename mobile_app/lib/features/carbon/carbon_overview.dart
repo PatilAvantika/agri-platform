@@ -34,6 +34,19 @@ class CarbonOverviewScreen extends StatelessWidget {
           'Carbon Credits',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
+<<<<<<< HEAD
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_active),
+            tooltip: 'Alerts',
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.alerts);
+            },
+          ),
+          const SizedBox(width: 6),
+        ],
+=======
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
       ),
 
       body: SafeArea(
@@ -134,7 +147,11 @@ class CarbonOverviewScreen extends StatelessWidget {
       ),
 
       // 🟢 Bottom Navigation (Carbon Active)
+<<<<<<< HEAD
+      bottomNavigationBar: const AgriBottomNav(currentIndex: 3),
+=======
       bottomNavigationBar: const AgriBottomNav(currentIndex: 2),
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
     );
   }
 }
