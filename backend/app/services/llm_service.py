@@ -1,17 +1,29 @@
 from langchain_groq import ChatGroq
+<<<<<<< HEAD
 from langchain_core.messages import SystemMessage, HumanMessage
 
 from app.core.config import GROQ_API_KEY
 print("GROQ_API_KEY loaded:", bool(GROQ_API_KEY))
+=======
+from langchain.schema import SystemMessage, HumanMessage
+from app.core.config import GROQ_API_KEY
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
 from app.memory.conversation import get_history, add_message
 
 # Initialize LLM
 llm = ChatGroq(
     groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
+<<<<<<< HEAD
     temperature=0.4,
 )
 
+=======
+    temperature=0.4
+)
+
+# System behavior prompt
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
 SYSTEM_PROMPT = """
 You are TechFiesta Krishi Advisor AI.
 
@@ -19,6 +31,7 @@ Your users are farmers.
 They want short, clear, and practical answers.
 
 RULES YOU MUST FOLLOW:
+<<<<<<< HEAD
 * Answer in bullet points only
 * Keep answers short and precise
 * Avoid theory, history, or definitions
@@ -40,6 +53,33 @@ DO NOT:
 """
 
 def generate_reply(user_id: str, user_message: str) -> str:
+=======
+- Answer in bullet points only
+- Keep answers short and precise
+- Avoid theory, history, or definitions
+- Give step-by-step or point-to-point solutions
+- Use simple words (farmer-friendly)
+- If the question is about farming, crops, soil, pests, weather, or carbon credits:
+  give direct actionable advice
+- If data is uncertain, say "Consult local agriculture officer"
+
+FORMAT STRICTLY LIKE THIS:
+- Point 1
+- Point 2
+- Point 3
+
+DO NOT:
+- Write long paragraphs
+- Use technical jargon
+- Add unnecessary explanations
+"""
+
+
+def generate_reply(user_id: str, user_message: str) -> str:
+    """
+    Generates AI response using conversation context
+    """
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
     history = get_history(user_id)
 
     messages = [SystemMessage(content=SYSTEM_PROMPT)]
@@ -51,6 +91,10 @@ def generate_reply(user_id: str, user_message: str) -> str:
 
     response = llm(messages).content
 
+<<<<<<< HEAD
+=======
+    # Save conversation
+>>>>>>> ff9a281da14fd2211d5e027c78a4e6daf4f6262e
     add_message(user_id, "user", user_message)
     add_message(user_id, "assistant", response)
 

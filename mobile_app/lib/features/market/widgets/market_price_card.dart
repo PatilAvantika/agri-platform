@@ -1,6 +1,5 @@
-import 'package:agri_platform/features/market/models/market_price_model.dart';
+import '../../market/models/market_price_model.dart';
 import 'package:flutter/material.dart';
-
 
 class MarketPriceCard extends StatelessWidget {
   final MarketPrice price;
