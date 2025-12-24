@@ -13,13 +13,17 @@ from app.utils.helpers import (
 
 router = APIRouter()
 
-@router.post("/", response_model=ChatResponse)
+# 🔥 IMPORTANT: Explicit OPTIONS handler for CORS preflight
+@router.options("/")
+def options_chat():
+    return {}
 
+@router.post("/", response_model=ChatResponse)
 def chat_endpoint(request: ChatRequest):
 
     user_message = request.message.strip()
 
-    # 📍 LOCATION QUERY (STRICT – NO LLM GUESSING)
+    # 📍 LOCATION QUERY
     if is_location_query(user_message):
 
         location = get_user_location(request.user_id)
@@ -39,12 +43,9 @@ def chat_endpoint(request: ChatRequest):
         if location.get("village"):
             reply += f"- Village: {location.get('village')}\n"
 
-        return ChatResponse(
-            reply=reply,
-            confidence=0.95
-        )
+        return ChatResponse(reply=reply, confidence=0.95)
 
-    # 🌦️ WEATHER QUERY (STRICT – NO LLM GUESSING)
+    # 🌦️ WEATHER QUERY
     if is_weather_query(user_message):
 
         location = get_user_location(request.user_id)
@@ -73,15 +74,10 @@ def chat_endpoint(request: ChatRequest):
             f"- Rainfall: {weather.get('rainfall')} mm\n"
         )
 
-        return ChatResponse(
-            reply=reply,
-            confidence=0.95
-        )
+        return ChatResponse(reply=reply, confidence=0.95)
 
-    # 🌱 CROP RECOMMENDATION FLOW
+    # 🌱 CROP RECOMMENDATION
     if is_crop_recommendation_intent(user_message):
-
-        print("👉 Crop intent detected")
 
         location = get_user_location(request.user_id)
 
@@ -92,39 +88,22 @@ def chat_endpoint(request: ChatRequest):
             )
 
         district = location.get("district")
-        print("👉 District:", district)
 
-        # 🌦️ Weather
         try:
             weather = fetch_weather_by_district(district)
-        except Exception as e:
-            print("❌ Weather fetch error:", e)
-            return ChatResponse(
-                reply="Unable to fetch weather data right now. Please try again later.",
-                confidence=0.4
-            )
-
-        # 🧪 Soil
-        try:
             soil = get_soil_data(
                 district=district,
                 user_soil=request.soil_data.dict() if request.soil_data else None
             )
         except Exception as e:
-            print("❌ Soil data error:", e)
+            print("❌ Data error:", e)
             return ChatResponse(
-                reply="Soil data not available for your location.",
+                reply="Unable to fetch soil or weather data right now.",
                 confidence=0.4
             )
 
-        # 🔗 Final ML input
         final_input = {**soil, **weather}
 
-        print("👉 Weather:", weather)
-        print("👉 Soil:", soil)
-        print("👉 Final ML input:", final_input)
-
-        # 🤖 ML Prediction
         try:
             ml_result = recommend_crop(final_input)
         except Exception as e:
@@ -145,8 +124,6 @@ Explain why this crop is suitable for the local soil and weather.
 Use simple farmer-friendly language.
 Give 2–3 practical next steps.
 Do NOT change the crop.
-Never guess location, region, coordinates, or weather.
-Use ONLY the data provided.
 """
 
         reply = generate_reply(
@@ -154,18 +131,12 @@ Use ONLY the data provided.
             user_message=system_prompt
         )
 
-        return ChatResponse(
-            reply=reply,
-            confidence=0.95
-        )
+        return ChatResponse(reply=reply, confidence=0.95)
 
-    # 💬 NORMAL CHAT (LLM ONLY – NO FACTUAL DATA)
+    # 💬 NORMAL CHAT
     reply = generate_reply(
         user_id=request.user_id,
         user_message=user_message
     )
 
-    return ChatResponse(
-        reply=reply,
-        confidence=0.87
-    )
+    return ChatResponse(reply=reply, confidence=0.87)

@@ -20,7 +20,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     {
       "text": "Namaskar! 🌱\nI am Agri Bot.\nAsk me anything about farming.",
       "isUser": false,
-      "type": "text"
     }
   ];
 
@@ -38,7 +37,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       messages.add({
         "text": text,
         "isUser": true,
-        "type": "text",
       });
       isLoading = true;
     });
@@ -48,25 +46,31 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
     try {
       final reply = await ChatService.sendMessage(
-        userId: "demo_user",
+        userId: "demo_user", // REQUIRED
         message: text,
       );
+
+      if (!mounted) return;
+
       setState(() {
         messages.add({
           "text": reply,
           "isUser": false,
-          "type": "text",
         });
       });
-    } catch (_) {
+    } catch (e) {
+      print("Chat error: $e");
+
+      if (!mounted) return;
+
       setState(() {
         messages.add({
           "text": "Sorry, something went wrong. Please try again.",
           "isUser": false,
-          "type": "text",
         });
       });
     } finally {
+      if (!mounted) return;
       setState(() => isLoading = false);
       _scrollToBottom();
     }
@@ -74,8 +78,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 300), () {
+      if (!_scrollController.hasClients) return;
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100,
+        _scrollController.position.maxScrollExtent + 120,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
@@ -90,16 +95,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         title: const Text('Ask Agri Bot'),
         backgroundColor: Colors.green.shade700,
         centerTitle: true,
-        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_active),
-            tooltip: 'Alerts',
             onPressed: () {
               Navigator.pushNamed(context, AppRoutes.alerts);
             },
           ),
-          const SizedBox(width: 6),
         ],
       ),
       body: Column(
@@ -113,7 +115,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     );
   }
 
-  // 🟢 QUICK CHIPS
   Widget _quickChips() {
     return SizedBox(
       height: 54,
@@ -126,13 +127,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           label: Text(quickChips[i]),
           onPressed: () => sendMessage(quickChips[i]),
           backgroundColor: Colors.green.shade100,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
     );
   }
 
-  // 💬 CHAT LIST
   Widget _chatList() {
     return ListView.builder(
       controller: _scrollController,
@@ -142,7 +141,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         if (isLoading && index == messages.length) {
           return const BotBubble(
             text: "Agri Bot is typing… 🌾",
-            isTyping: true,
           );
         }
 
@@ -154,37 +152,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     );
   }
 
-  // ✍️ INPUT BAR (VOICE + IMAGE + SEND)
   Widget _inputBar() {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 12,
-          )
-        ],
-      ),
+      color: Colors.white,
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(Icons.mic, color: Colors.green.shade700),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Voice input coming soon 🎤")),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.image, color: Colors.green.shade700),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Image input coming soon 🖼️")),
-              );
-            },
-          ),
           Expanded(
             child: TextField(
               controller: _controller,
@@ -193,8 +166,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 hintText: 'Ask your farming question…',
                 filled: true,
                 fillColor: Colors.grey.shade100,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(28),
                   borderSide: BorderSide.none,
@@ -215,12 +186,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 }
 
-/// 🤖 BOT MESSAGE
 class BotBubble extends StatelessWidget {
   final String text;
-  final bool isTyping;
-
-  const BotBubble({required this.text, this.isTyping = false});
+  const BotBubble({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -233,26 +201,15 @@ class BotBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-            )
-          ],
         ),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        child: Text(text),
       ),
     );
   }
 }
 
-/// 👤 USER MESSAGE
 class UserBubble extends StatelessWidget {
   final String text;
-
   const UserBubble({required this.text});
 
   @override
@@ -264,14 +221,12 @@ class UserBubble extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         constraints: const BoxConstraints(maxWidth: 320),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green.shade600, Colors.green.shade400],
-          ),
+          color: Colors.green.shade600,
           borderRadius: BorderRadius.circular(18),
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
