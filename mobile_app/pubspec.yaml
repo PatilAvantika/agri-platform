@@ -1,0 +1,24 @@
+name: agri_platform
+description: TechFiesta Agri Platform Flutter App
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  fl_chart: ^0.69.0
+
+  cupertino_icons: ^1.0.6
+  http: ^1.2.0   # ✅ ADD THIS LINE
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
