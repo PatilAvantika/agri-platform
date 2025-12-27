@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+from app.api.chat import router as chat_router
+from app.api.user import router as user_router
+from app.api.carbon_routes import router as carbon_router
+
 import os
 from dotenv import load_dotenv
 from app.api.v1.weather import router as weather_router
@@ -35,6 +40,11 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.include_router(weather_router, prefix="/api")
 app.include_router(market_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
+# Routers
+app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
+app.include_router(user_router, prefix="/api/user", tags=["User"])
+app.include_router(carbon_router, prefix="/api/carbon", tags=["Carbon Credits"])
+
 
 @app.get("/")
 def root():
