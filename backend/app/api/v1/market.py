@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends,HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from typing import Optional
+
 from app.db.database import SessionLocal
 from app.schemas.market_price import MarketPriceResponse
 from app.services.market_service import get_price_summary
 from app.models.market_price import MarketPrice
 
 router = APIRouter(prefix="/market", tags=["Market"])
+
 
 def get_db():
     db = SessionLocal()
@@ -19,7 +22,7 @@ def get_db():
 @router.get("/prices")
 def get_market_prices(
     commodity: str = "Tomato",
-    state: str | None = None,
+    state: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     query = db.query(MarketPrice)
@@ -30,8 +33,11 @@ def get_market_prices(
     if state:
         query = query.filter(MarketPrice.state == state)
 
-    # Always return something
-    results = query.order_by(MarketPrice.arrival_date.desc()).limit(10).all()
+    results = (
+        query.order_by(MarketPrice.arrival_date.desc())
+        .limit(10)
+        .all()
+    )
 
     return results
 
@@ -65,6 +71,3 @@ def get_market_summary(
         "max_price": result.max,
         "avg_price": round(result.avg, 2),
     }
-
-
-

@@ -52,7 +52,11 @@ class _BasicFarmProfileScreenState extends State<BasicFarmProfileScreen> {
     );
 
     Future.delayed(const Duration(milliseconds: 700), () {
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (route) => false, // Remove all previous routes
+      );
     });
   }
 

@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import './core/app_routes.dart';
+import './firebase_options.dart';
+import './features/auth/auth_wrapper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
   runApp(const AgriBotApp());
 }
 
@@ -13,11 +23,12 @@ void main() {
 /// - Initialize MaterialApp
 /// - Attach routes
 /// - Set global theme
-/// - Decide initial screen
+/// - Handle authentication state through AuthWrapper
 ///
 /// NOTE:
 /// - No business logic here
 /// - Clean & production-ready
+/// - AuthWrapper handles authentication flow
 
 class AgriBotApp extends StatelessWidget {
   const AgriBotApp({Key? key}) : super(key: key);
@@ -74,8 +85,8 @@ class AgriBotApp extends StatelessWidget {
       // 🧭 Routing
       routes: AppRoutes.routes,
 
-      // 🚀 App entry point
-      initialRoute: AppRoutes.splash,
+      // 🚀 App entry point - AuthWrapper handles authentication
+      home: const AuthWrapper(),
     );
   }
 }
