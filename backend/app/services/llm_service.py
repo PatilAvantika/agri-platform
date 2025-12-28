@@ -1,5 +1,5 @@
 from langchain_groq import ChatGroq
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 from app.core.config import GROQ_API_KEY
 from app.memory.conversation import get_history, add_message
@@ -55,7 +55,10 @@ def generate_reply(user_id: str, user_message: str) -> str:
     messages = [SystemMessage(content=SYSTEM_PROMPT)]
 
     for msg in history:
-        messages.append(HumanMessage(content=msg["content"]))
+        if msg.get("role") == "user":
+            messages.append(HumanMessage(content=msg["content"]))
+        elif msg.get("role") == "assistant":
+            messages.append(AIMessage(content=msg["content"]))
 
     messages.append(HumanMessage(content=user_message))
 

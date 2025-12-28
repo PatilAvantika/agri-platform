@@ -2,8 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ChatService {
+  // 🔴 IMPORTANT: Replace <YOUR_COMPUTER_IP> with your computer's local IP.
+  // On Windows, run `ipconfig` in the command prompt and find the "IPv4 Address".
+  // It will look like 192.168.x.x
+  // For Android Emulator, you can use 10.0.2.2 instead of your local IP.
   static const String _baseUrl =
-      "http://127.0.0.1:8000/api/chat/"; // web / macOS / iOS simulator
+      "http://192.168.0.105:8000/api/chat/";
 
   static Future<String> sendMessage({
     required String userId,
