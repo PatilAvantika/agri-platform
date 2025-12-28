@@ -24,4 +24,5 @@ eth-account
 
 # ---------- Utilities ----------
 requests
+httpx
 

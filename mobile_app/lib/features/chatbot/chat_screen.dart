@@ -1,3 +1,5 @@
+import 'package:agri_platform/services/tts_service.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import '../../core/app_routes.dart';
 import '../../services/chat_service.dart';
@@ -13,15 +15,42 @@ class ChatbotScreen extends StatefulWidget {
 class _ChatbotScreenState extends State<ChatbotScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  final TtsApiService _ttsApiService = TtsApiService();
 
+  String? _currentPlayingUrl;
   bool isLoading = false;
 
   final List<Map<String, dynamic>> messages = [
     {
       "text": "Namaskar! 🌱\nI am Agri Bot.\nAsk me anything about farming.",
       "isUser": false,
+      "audioUrl": null,
     }
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+      print('Current player state: $s');
+      setState(() {
+        if (s == PlayerState.completed || s == PlayerState.stopped) {
+          _currentPlayingUrl = null;
+        }
+      });
+    });
+    _audioPlayer.onLog.listen((String msg) {
+      print('Audio player log: $msg');
+    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.release();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
 
   final List<String> quickChips = [
     "Best crop for me",
@@ -56,6 +85,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         messages.add({
           "text": reply,
           "isUser": false,
+          "audioUrl": null,
         });
       });
     } catch (e) {
@@ -67,12 +97,55 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         messages.add({
           "text": "Sorry, something went wrong. Please try again.",
           "isUser": false,
+          "audioUrl": null,
         });
       });
     } finally {
       if (!mounted) return;
       setState(() => isLoading = false);
       _scrollToBottom();
+    }
+  }
+
+  Future<void> playTts(Map<String, dynamic> message) async {
+    String? audioUrl = message['audioUrl'];
+
+    // If URL is not cached, generate and cache it.
+    if (audioUrl == null) {
+      try {
+        print("Requesting TTS for text: '${message['text']}'");
+        audioUrl = await _ttsApiService.convertTextToSpeech(message['text']);
+        setState(() {
+          message['audioUrl'] = audioUrl;
+        });
+      } catch (e) {
+        print("TTS error: $e");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Could not generate audio URL")),
+          );
+        }
+        return;
+      }
+    }
+
+    if (audioUrl == null) return;
+
+    final isThisAudioPlaying =
+        _currentPlayingUrl == audioUrl && _audioPlayer.state == PlayerState.playing;
+    final isThisAudioPaused =
+        _currentPlayingUrl == audioUrl && _audioPlayer.state == PlayerState.paused;
+
+    if (isThisAudioPlaying) {
+      await _audioPlayer.pause();
+    } else if (isThisAudioPaused) {
+      await _audioPlayer.resume();
+    } else {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(UrlSource(audioUrl));
+      setState(() {
+        _currentPlayingUrl = audioUrl;
+      });
     }
   }
 
@@ -139,15 +212,28 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       itemCount: messages.length + (isLoading ? 1 : 0),
       itemBuilder: (_, index) {
         if (isLoading && index == messages.length) {
-          return const BotBubble(
+          return BotBubble(
             text: "Agri Bot is typing… 🌾",
+            onTtsPressed: () {},
           );
         }
 
         final msg = messages[index];
-        return msg["isUser"]
-            ? UserBubble(text: msg["text"])
-            : BotBubble(text: msg["text"]);
+        if (msg["isUser"]) {
+          return UserBubble(text: msg["text"]);
+        }
+
+        final isPlaying = _currentPlayingUrl == msg['audioUrl'] &&
+            _audioPlayer.state == PlayerState.playing;
+        final isPaused = _currentPlayingUrl == msg['audioUrl'] &&
+            _audioPlayer.state == PlayerState.paused;
+
+        return BotBubble(
+          text: msg["text"],
+          onTtsPressed: () => playTts(msg),
+          isPlaying: isPlaying,
+          isPaused: isPaused,
+        );
       },
     );
   }
@@ -188,10 +274,29 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
 class BotBubble extends StatelessWidget {
   final String text;
-  const BotBubble({required this.text});
+  final VoidCallback onTtsPressed;
+  final bool isPlaying;
+  final bool isPaused;
+
+  const BotBubble({
+    Key? key,
+    required this.text,
+    required this.onTtsPressed,
+    this.isPlaying = false,
+    this.isPaused = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    IconData icon;
+    if (isPlaying) {
+      icon = Icons.pause;
+    } else if (isPaused) {
+      icon = Icons.play_arrow;
+    } else {
+      icon = Icons.volume_up;
+    }
+
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
@@ -202,7 +307,16 @@ class BotBubble extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
         ),
-        child: Text(text),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Text(text)),
+            IconButton(
+              icon: Icon(icon),
+              onPressed: onTtsPressed,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -210,7 +324,7 @@ class BotBubble extends StatelessWidget {
 
 class UserBubble extends StatelessWidget {
   final String text;
-  const UserBubble({required this.text});
+  const UserBubble({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

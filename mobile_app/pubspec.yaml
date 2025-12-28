@@ -10,11 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.2.1
+  audioplayers: ^6.0.0 # Or the latest version
   
   fl_chart: ^0.69.0
 
   cupertino_icons: ^1.0.6
-  http: ^1.2.0   # ✅ ADD THIS LINE
+  #http: ^1.2.0   # ✅ ADD THIS LINE
 
 dev_dependencies:
   flutter_test:
