@@ -9,9 +9,13 @@
       "dependencies": [
         "audioplayers",
         "cupertino_icons",
+        "dio",
+        "firebase_auth",
+        "firebase_core",
         "fl_chart",
         "flutter",
-        "http"
+        "http",
+        "pinput"
       ],
       "devDependencies": [
         "flutter_test"
@@ -36,9 +40,61 @@
       ]
     },
     {
+      "name": "firebase_auth",
+      "version": "6.1.3",
+      "dependencies": [
+        "firebase_auth_platform_interface",
+        "firebase_auth_web",
+        "firebase_core",
+        "firebase_core_platform_interface",
+        "flutter",
+        "meta"
+      ]
+    },
+    {
+      "name": "firebase_core",
+      "version": "4.3.0",
+      "dependencies": [
+        "firebase_core_platform_interface",
+        "firebase_core_web",
+        "flutter",
+        "meta"
+      ]
+    },
+    {
+      "name": "dio",
+      "version": "5.9.0",
+      "dependencies": [
+        "async",
+        "collection",
+        "dio_web_adapter",
+        "http_parser",
+        "meta",
+        "mime",
+        "path"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.6.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
       "name": "cupertino_icons",
       "version": "1.0.8",
       "dependencies": []
+    },
+    {
+      "name": "pinput",
+      "version": "6.0.1",
+      "dependencies": [
+        "flutter"
+      ]
     },
     {
       "name": "fl_chart",
@@ -174,102 +230,67 @@
       ]
     },
     {
-      "name": "equatable",
-      "version": "2.0.7",
-      "dependencies": [
-        "collection",
-        "meta"
-      ]
-    },
-    {
-      "name": "uuid",
-      "version": "4.5.2",
-      "dependencies": [
-        "crypto",
-        "fixnum",
-        "meta"
-      ]
-    },
-    {
-      "name": "synchronized",
-      "version": "3.4.0",
-      "dependencies": []
-    },
-    {
-      "name": "path_provider",
-      "version": "2.1.5",
-      "dependencies": [
-        "flutter",
-        "path_provider_android",
-        "path_provider_foundation",
-        "path_provider_linux",
-        "path_provider_platform_interface",
-        "path_provider_windows"
-      ]
-    },
-    {
-      "name": "file",
-      "version": "7.0.1",
-      "dependencies": [
-        "meta",
-        "path"
-      ]
-    },
-    {
-      "name": "audioplayers_windows",
-      "version": "4.2.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
-      ]
-    },
-    {
-      "name": "audioplayers_web",
-      "version": "5.1.1",
-      "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter",
-        "flutter_web_plugins",
-        "web"
-      ]
-    },
-    {
-      "name": "audioplayers_platform_interface",
-      "version": "7.1.1",
+      "name": "firebase_core_platform_interface",
+      "version": "6.0.2",
       "dependencies": [
         "collection",
         "flutter",
+        "flutter_test",
         "meta",
         "plugin_platform_interface"
       ]
     },
     {
-      "name": "audioplayers_linux",
-      "version": "4.2.1",
+      "name": "firebase_auth_web",
+      "version": "6.1.1",
       "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
+        "firebase_auth_platform_interface",
+        "firebase_core",
+        "firebase_core_web",
+        "flutter",
+        "flutter_web_plugins",
+        "http_parser",
+        "meta",
+        "web"
       ]
     },
     {
-      "name": "audioplayers_darwin",
-      "version": "6.3.0",
+      "name": "firebase_auth_platform_interface",
+      "version": "8.1.5",
       "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
+        "_flutterfire_internals",
+        "collection",
+        "firebase_core",
+        "flutter",
+        "http",
+        "meta",
+        "plugin_platform_interface"
       ]
     },
     {
-      "name": "audioplayers_android",
-      "version": "5.2.1",
+      "name": "firebase_core_web",
+      "version": "3.3.1",
       "dependencies": [
-        "audioplayers_platform_interface",
-        "flutter"
+        "firebase_core_platform_interface",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "web"
       ]
     },
     {
-      "name": "web",
-      "version": "1.1.1",
+      "name": "dio_web_adapter",
+      "version": "2.1.1",
+      "dependencies": [
+        "dio",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
+      "name": "mime",
+      "version": "2.0.0",
       "dependencies": []
     },
     {
@@ -285,6 +306,19 @@
     {
       "name": "async",
       "version": "2.13.0",
+      "dependencies": [
+        "collection",
+        "meta"
+      ]
+    },
+    {
+      "name": "web",
+      "version": "1.1.1",
+      "dependencies": []
+    },
+    {
+      "name": "equatable",
+      "version": "2.0.7",
       "dependencies": [
         "collection",
         "meta"
@@ -357,61 +391,10 @@
       ]
     },
     {
-      "name": "fixnum",
-      "version": "1.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "crypto",
-      "version": "3.0.7",
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
       "dependencies": [
-        "typed_data"
-      ]
-    },
-    {
-      "name": "path_provider_windows",
-      "version": "2.3.0",
-      "dependencies": [
-        "ffi",
-        "flutter",
-        "path",
-        "path_provider_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_platform_interface",
-      "version": "2.1.2",
-      "dependencies": [
-        "flutter",
-        "platform",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_linux",
-      "version": "2.2.1",
-      "dependencies": [
-        "ffi",
-        "flutter",
-        "path",
-        "path_provider_platform_interface",
-        "xdg_directories"
-      ]
-    },
-    {
-      "name": "path_provider_foundation",
-      "version": "2.5.1",
-      "dependencies": [
-        "flutter",
-        "path_provider_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_android",
-      "version": "2.2.22",
-      "dependencies": [
-        "flutter",
-        "path_provider_platform_interface"
+        "meta"
       ]
     },
     {
@@ -422,9 +405,13 @@
       ]
     },
     {
-      "name": "plugin_platform_interface",
-      "version": "2.1.8",
+      "name": "_flutterfire_internals",
+      "version": "1.3.65",
       "dependencies": [
+        "collection",
+        "firebase_core",
+        "firebase_core_platform_interface",
+        "flutter",
         "meta"
       ]
     },

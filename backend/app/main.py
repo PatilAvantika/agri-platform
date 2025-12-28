@@ -10,47 +10,39 @@ from app.api.tts import router as tts_router
 from app.api.play_audio import router as play_audio_router
 
 import os
-import logging
+from dotenv import load_dotenv
+from app.api.v1.weather import router as weather_router
+from app.api.v1.market import router as market_router
+from app.api.v1.auth import router as auth_router
+load_dotenv() 
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+app = FastAPI(
+    title="Agri Platform Backend",
+    description="Backend APIs for Agri Advisory System",
+    version="1.0.0"
+)
 
-app = FastAPI(title="TechFiesta AI Backend")
-
-# Logging middleware
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    logger.info(f"Incoming request: {request.method} {request.url}")
-    logger.info(f"Headers: {request.headers}")
-    response = await call_next(request)
-    return response
-
-# ✅ CORS — THIS WAS MISSING (CRITICAL)
+# ---------------- CORS ----------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],      # allow all for dev
+      allow_origins=["*"],
+ 
     allow_credentials=True,
-    allow_methods=["*"],      # allows OPTIONS, POST, GET
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Generic exception handler
-@app.exception_handler(Exception)
-async def generic_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    return JSONResponse(
-        status_code=500,
-        content={"message": f"Something went wrong on the server: {exc}"},
-    )
-
-# Static audio
+# ---------------- Static files ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-AUDIO_DIR = os.path.join(BASE_DIR, "../static/audio")
-os.makedirs(AUDIO_DIR, exist_ok=True)
+STATIC_DIR = os.path.join(BASE_DIR, "../static")
+os.makedirs(STATIC_DIR, exist_ok=True)
 
-app.mount("/static/audio", StaticFiles(directory=AUDIO_DIR), name="static_audio")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+# ---------------- ROUTES ----------------
+app.include_router(weather_router, prefix="/api")
+app.include_router(market_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 # Routers
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(user_router, prefix="/api/user", tags=["User"])
@@ -59,6 +51,6 @@ app.include_router(tts_router, prefix="/api/tts", tags=["TTS"])
 app.include_router(play_audio_router, prefix="/api", tags=["Play Audio"])
 
 
-@app.get("/health")
-def health():
-    return {"status": "TechFiesta backend running"}
+@app.get("/")
+def root():
+    return {"status": "Agri Backend Running"}

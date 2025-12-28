@@ -16,9 +16,7 @@ from app.services.tts_service import text_to_speech
 router = APIRouter()
 
 # 🔥 IMPORTANT: Explicit OPTIONS handler for CORS preflight
-@router.options("/")
-def options_chat():
-    return {}
+
 
 @router.post("/", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
