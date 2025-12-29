@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.models.market_price import MarketPrice
-
+from typing import Optional
 def normalize_record(record: dict):
     try:
         return {
@@ -59,11 +59,14 @@ def save_market_prices(db: Session, records: list):
 
     db.commit()
 
-def get_prices(db: Session, commodity: str, state: str, mandi: str | None):
-    q = db.query(MarketPrice).filter(
-        MarketPrice.commodity == commodity,
-        MarketPrice.state == state,
-    )
+
+def get_prices(
+    db: Session,
+    commodity: str,
+    state: str,
+    mandi: Optional[str]
+):
+
 
     if mandi:
         q = q.filter(MarketPrice.mandi == mandi)

@@ -96,3 +96,19 @@ def is_location_query(message: str) -> bool:
 
     msg = message.lower()
     return any(k in msg for k in keywords)
+
+
+def is_tts_query(message: str) -> bool:
+    keywords = [
+        "in audio",
+        "audio",
+        "in voice",
+        "voice",
+        "say it",
+        "speak it",
+        "read it out",
+        "in sound",
+        "sound"
+    ]
+    msg = message.lower()
+    return any(keyword in msg for keyword in keywords)

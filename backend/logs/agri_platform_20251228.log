@@ -1,0 +1,95 @@
+2025-12-28 11:06:43,839 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:06:43,882 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:07:06,352 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:07:06,386 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:07:06,510 - app.api.chat - INFO - Processing chat request for user test123: What is the weather today?
+2025-12-28 11:07:06,510 - app.api.chat - INFO - Processing weather query
+2025-12-28 11:07:06,511 - app.core.logger - WARNING - No location found for user test123, returning default configuration
+2025-12-28 11:09:11,995 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:12:38,558 - app.api.chat - INFO - Processing chat request for user test123: Hello, how are you?
+2025-12-28 11:12:38,559 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:12:39,085 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:12:39,098 - app.api.chat - INFO - Normal chat completed for user test123
+2025-12-28 11:12:48,373 - app.api.chat - INFO - Processing chat request for user farmer123: What crops should I plant in winter?
+2025-12-28 11:12:48,373 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:12:48,655 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:12:48,656 - app.api.chat - INFO - Normal chat completed for user farmer123
+2025-12-28 11:12:57,612 - app.api.chat - INFO - Processing chat request for user mobile_user: आज मौसम कैसा है?
+2025-12-28 11:12:57,614 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:12:57,837 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:12:57,839 - app.api.chat - INFO - Normal chat completed for user mobile_user
+2025-12-28 11:13:06,557 - app.api.chat - INFO - Processing chat request for user : 
+2025-12-28 11:13:06,558 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:13:06,731 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:13:06,734 - app.api.chat - INFO - Normal chat completed for user 
+2025-12-28 11:13:37,428 - app.api.chat - INFO - Processing chat request for user test_user: What is the weather in my location?
+2025-12-28 11:13:37,428 - app.api.chat - INFO - Processing location query
+2025-12-28 11:13:37,429 - app.core.logger - WARNING - No location found for user test_user, returning default configuration
+2025-12-28 11:19:02,433 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:30:10,646 - app.api.chat - INFO - Processing chat request for user test123: Hello, how are you?
+2025-12-28 11:30:10,649 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:30:11,067 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:30:11,092 - app.api.chat - INFO - Normal chat completed for user test123
+2025-12-28 11:31:11,641 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 11:31:11,644 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 11:31:11,644 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 11:31:13,965 - app.api.chat - INFO - Processing chat request for user demo_user: Today mandi prices
+2025-12-28 11:31:13,965 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:31:14,298 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:31:14,306 - app.api.chat - INFO - Normal chat completed for user demo_user
+2025-12-28 11:31:17,732 - app.api.chat - INFO - Processing chat request for user demo_user: Will it rain?
+2025-12-28 11:31:17,732 - app.api.chat - INFO - Processing weather query
+2025-12-28 11:31:17,732 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 11:33:15,179 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:33:15,287 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:34:48,283 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:35:31,525 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 11:35:31,526 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 11:35:31,526 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 11:48:09,688 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 11:50:47,812 - app.api.chat - INFO - Processing chat request for user test: hello
+2025-12-28 11:50:47,813 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:50:48,084 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:50:48,098 - app.api.chat - INFO - Normal chat completed for user test
+2025-12-28 11:52:54,567 - app.api.chat - INFO - Processing chat request for user demo_user: hi
+2025-12-28 11:52:54,573 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 11:52:54,857 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 11:52:54,889 - app.api.chat - INFO - Normal chat completed for user demo_user
+2025-12-28 11:52:57,959 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 11:52:57,960 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 11:52:57,961 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 12:04:09,481 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 13:49:12,527 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 13:49:12,531 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 13:49:12,531 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 14:15:28,999 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 14:15:29,003 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 14:15:29,003 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 14:21:35,537 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 14:21:35,541 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 14:21:35,541 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 14:22:02,992 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 14:22:02,993 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 14:22:02,994 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 14:44:29,925 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 15:04:27,662 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 15:07:15,600 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 15:07:15,600 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 15:07:15,600 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 15:12:01,374 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 15:18:07,075 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 15:18:07,083 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 15:18:07,083 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 15:21:23,432 - app.api.chat - INFO - Processing chat request for user demo_user: Best crop for me
+2025-12-28 15:21:23,435 - app.api.chat - INFO - Processing crop recommendation query
+2025-12-28 15:21:23,435 - app.core.logger - WARNING - No location found for user demo_user, returning default configuration
+2025-12-28 15:51:57,923 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 15:53:41,967 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 15:55:17,429 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 16:00:46,305 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 16:22:30,718 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+2025-12-28 16:36:23,028 - app.api.chat - INFO - Processing chat request for user demo_user: Today mandi prices
+2025-12-28 16:36:23,033 - app.api.chat - INFO - Processing normal chat query
+2025-12-28 16:36:23,973 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-28 16:36:24,025 - app.api.chat - INFO - Normal chat completed for user demo_user
+2025-12-28 16:39:11,658 - app.core.logger - INFO - Database engine created successfully: postgresql://neondb_owner:npg_HkK0bt9UImdA@ep-royal-sun-ah9vpp09-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require

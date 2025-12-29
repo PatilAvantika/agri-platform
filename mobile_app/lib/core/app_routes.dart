@@ -65,7 +65,7 @@ class AppRoutes {
   // ================= ROUTE MAP =================
   static final Map<String, WidgetBuilder> routes = {
     // Onboarding
-    splash: (_) => const SplashScreen(),
+    // splash: (_) => const SplashScreen(), // Removed - handled by AuthWrapper
     language: (_) => const LanguageSelectionScreen(),
     location: (_) => const LocationSetupScreen(),
     farmProfile: (_) => const BasicFarmProfileScreen(),

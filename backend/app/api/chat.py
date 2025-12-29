@@ -8,8 +8,10 @@ from app.services.user_service import get_user_location
 from app.utils.helpers import (
     is_crop_recommendation_intent,
     is_location_query,
-    is_weather_query
+    is_weather_query,
+    is_tts_query
 )
+from app.services.tts_service import text_to_speech
 
 router = APIRouter()
 
@@ -17,9 +19,47 @@ router = APIRouter()
 
 
 @router.post("/", response_model=ChatResponse)
-def chat_endpoint(request: ChatRequest):
+async def chat_endpoint(request: ChatRequest):
 
     user_message = request.message.strip()
+
+    # 🔊 TTS QUERY
+    if is_tts_query(user_message):
+        # Simplistic text extraction
+        text_to_convert = ""
+        keywords = ["in audio", "audio", "in voice", "voice", "say it", "speak it", "read it out", "in sound", "sound"]
+        for keyword in keywords:
+            if keyword in user_message:
+                # Take the text after the keyword
+                parts = user_message.split(keyword)
+                if len(parts) > 1 and parts[1].strip():
+                    text_to_convert = parts[1].strip()
+                    # if the text starts with ":" or ",", remove it
+                    if text_to_convert.startswith(":") or text_to_convert.startswith(","):
+                        text_to_convert = text_to_convert[1:].strip()
+                    break
+        
+        if not text_to_convert:
+            # if no text is found after the keyword, use the normal reply
+            reply = generate_reply(
+                user_id=request.user_id,
+                user_message=user_message
+            )
+            text_to_convert = reply
+
+        try:
+            audio_data = await text_to_speech(text_to_convert)
+            return ChatResponse(
+                reply=f"Audio response for: '{text_to_convert}'",
+                audio_path=audio_data["file_path"],
+                confidence=0.95
+            )
+        except Exception as e:
+            print("❌ TTS error:", e)
+            return ChatResponse(
+                reply="I am unable to generate audio right now.",
+                confidence=0.3
+            )
 
     # 📍 LOCATION QUERY
     if is_location_query(user_message):

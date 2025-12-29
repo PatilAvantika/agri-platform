@@ -1,10 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from app.api.chat import router as chat_router
 from app.api.user import router as user_router
 from app.api.carbon_routes import router as carbon_router
+from app.api.tts import router as tts_router
+from app.api.play_audio import router as play_audio_router
 
 import os
 from dotenv import load_dotenv
@@ -30,11 +35,19 @@ app.add_middleware(
 )
 
 # ---------------- Static files ----------------
+import os
+from fastapi.staticfiles import StaticFiles
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.join(BASE_DIR, "../static")
+
+STATIC_DIR = os.path.abspath(
+    os.path.join(BASE_DIR, "..", "static")
+)
+
 os.makedirs(STATIC_DIR, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 # ---------------- ROUTES ----------------
 app.include_router(weather_router, prefix="/api")
@@ -44,6 +57,8 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(user_router, prefix="/api/user", tags=["User"])
 app.include_router(carbon_router, prefix="/api/carbon", tags=["Carbon Credits"])
+app.include_router(tts_router, prefix="/api/tts", tags=["TTS"])
+app.include_router(play_audio_router, prefix="/api", tags=["Play Audio"])
 
 
 @app.get("/")
