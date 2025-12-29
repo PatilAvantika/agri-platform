@@ -1,44 +1,83 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart'; // ✅ for kIsWeb
 import 'package:http/http.dart' as http;
 
 class TtsApiService {
-  // IMPORTANT: Use your computer's IP address, not localhost or 127.0.0.1
-  // Your phone and computer must be on the same Wi-Fi network.
-  static const String _baseUrl = 'http://192.168.0.105:8000'; // <-- CHANGE THIS
+  /// Base backend URL depending on platform
+  static String get _baseUrl {
+    // 🌐 Flutter Web
+    if (kIsWeb) {
+      return 'http://127.0.0.1:8000';
+    }
 
-  /// Converts the given text to speech by calling the backend API.
-  ///
-  /// Returns the server path to the generated audio file.
-  /// Throws an exception if the request fails.
+    // 📱 Mobile (Android Emulator default)
+    // Change this ONLY if using real device
+    return 'http://10.0.2.2:8000';
+  }
+
+  /// Converts text to speech via backend
+  /// Returns FULL audio URL
   Future<String> convertTextToSpeech(String text) async {
+    if (text.trim().isEmpty) {
+      throw Exception('Text cannot be empty');
+    }
+
     final Uri url = Uri.parse('$_baseUrl/api/tts/tts');
 
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'text': text,
-        }),
+      debugPrint(
+        'TTS: Requesting speech for text: '
+        '"${text.substring(0, text.length > 50 ? 50 : text.length)}'
+        '${text.length > 50 ? '...' : ''}"',
       );
+      debugPrint('TTS: Using backend URL: $_baseUrl');
+
+      final response = await http
+          .post(
+            url,
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode({'text': text}),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
-        // If the server returns a 200 OK response, parse the JSON.
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        final String filePath = responseBody['file_path'];
-        
-        // The full URL to the audio file
-        return '$_baseUrl$filePath';
+
+        final String? filePath = responseBody['file_path'];
+        if (filePath == null || filePath.isEmpty) {
+          throw Exception('Invalid TTS response: missing file_path');
+        }
+
+        final String audioUrl = '$_baseUrl$filePath';
+        debugPrint('TTS: Audio URL generated → $audioUrl');
+
+        return audioUrl;
       } else {
-        // If the server did not return a 200 OK response,
-        // throw an exception.
-        throw Exception('Failed to convert text to speech. Status code: ${response.statusCode}');
+        debugPrint(
+          'TTS: HTTP ${response.statusCode} → ${response.body}',
+        );
+        throw Exception(
+          'TTS service error ${response.statusCode}: ${response.body}',
+        );
       }
     } catch (e) {
-      // Handle network errors or other exceptions
-      throw Exception('Failed to connect to the TTS service: $e');
+      debugPrint('TTS: Error occurred → $e');
+      throw Exception('TTS service failed: $e');
+    }
+  }
+
+  /// Simple health check for backend
+  Future<bool> isServiceReachable() async {
+    try {
+      final Uri healthUrl = Uri.parse('$_baseUrl/health');
+      final response =
+          await http.get(healthUrl).timeout(const Duration(seconds: 5));
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('TTS: Health check failed → $e');
+      return false;
     }
   }
 }

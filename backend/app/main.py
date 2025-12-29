@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from app.api.chat import router as chat_router
 from app.api.user import router as user_router
@@ -33,11 +35,19 @@ app.add_middleware(
 )
 
 # ---------------- Static files ----------------
+import os
+from fastapi.staticfiles import StaticFiles
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.join(BASE_DIR, "../static")
+
+STATIC_DIR = os.path.abspath(
+    os.path.join(BASE_DIR, "..", "static")
+)
+
 os.makedirs(STATIC_DIR, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 # ---------------- ROUTES ----------------
 app.include_router(weather_router, prefix="/api")

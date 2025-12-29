@@ -1,44 +1,95 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart'; // ✅ kIsWeb
 import 'package:http/http.dart' as http;
 
 class ChatService {
-  // 🔴 IMPORTANT: Replace <YOUR_COMPUTER_IP> with your computer's local IP.
-  // On Windows, run `ipconfig` in the command prompt and find the "IPv4 Address".
-  // It will look like 192.168.x.x
-  // For Android Emulator, you can use 10.0.2.2 instead of your local IP.
-  static const String _baseUrl =
-      "http://192.168.0.105:8000/api/chat/";
+  /// Platform-safe backend URL
+  static String get _baseUrl {
+    // 🌐 Flutter Web
+    if (kIsWeb) {
+      return 'http://127.0.0.1:8000';
+    }
+
+    // 📱 Android Emulator / Mobile
+    return 'http://10.0.2.2:8000';
+  }
 
   static Future<String> sendMessage({
     required String userId,
     required String message,
     String language = "en",
   }) async {
-    final body = {
+    final Map<String, dynamic> body = {
       "user_id": userId,
       "message": message,
       "language": language,
     };
 
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(body),
-    );
+    final Uri url = Uri.parse('$_baseUrl/api/chat/');
 
-    print("STATUS: ${response.statusCode}");
-    print("BODY: ${response.body}");
+    try {
+      debugPrint('Chat: POST $url');
+      debugPrint('Chat: Body → $body');
 
-    if (response.statusCode != 200) {
-      throw Exception("Server error ${response.statusCode}");
+      final response = await http
+          .post(
+            url,
+            headers: const {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      debugPrint("Chat: STATUS ${response.statusCode}");
+      debugPrint("Chat: RESPONSE ${response.body}");
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+
+        if (data["reply"] is String) {
+          return data["reply"];
+        } else {
+          throw Exception(
+            "Invalid response format: 'reply' field missing",
+          );
+        }
+      }
+
+      // --------- HTTP ERRORS ---------
+      if (response.statusCode == 404) {
+        throw Exception(
+          "Chat service not found. Is backend running?",
+        );
+      } else if (response.statusCode == 500) {
+        throw Exception(
+          "Server error. Please try again later.",
+        );
+      } else if (response.statusCode == 503) {
+        throw Exception(
+          "Chat service unavailable. Please retry.",
+        );
+      } else {
+        throw Exception(
+          "Server error ${response.statusCode}: ${response.body}",
+        );
+      }
+    } catch (e) {
+      debugPrint("Chat: ERROR → $e");
+      throw Exception("Chat service error: $e");
     }
+  }
 
-    final Map<String, dynamic> data = jsonDecode(response.body);
-
-    if (data["reply"] is String) {
-      return data["reply"]; // ✅ STRING ONLY
-    } else {
-      throw Exception("Invalid response format");
+  /// Backend health check
+  static Future<bool> isServiceReachable() async {
+    try {
+      final Uri healthUrl = Uri.parse('$_baseUrl/health');
+      final response =
+          await http.get(healthUrl).timeout(const Duration(seconds: 5));
+      return response.statusCode == 200;
+    } catch (_) {
+      return false;
     }
   }
 }
